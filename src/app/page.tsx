@@ -2,18 +2,19 @@ import { auth, signOut } from "@/lib/auth"
 
 export default async function Home() {
   const session = await auth()
+  const user = session!.user
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-6 p-8">
       <div className="flex flex-col items-center gap-4 rounded-xl border p-8">
-        <h1 className="text-2xl font-semibold">Hola, {session.user.name ?? session.user.email}</h1>
+        <h1 className="text-2xl font-semibold">Hola, {user.name ?? user.email}</h1>
 
         <div className="text-sm text-muted-foreground space-y-1">
-          <p><span className="font-medium text-foreground">ID:</span> {session.user.id}</p>
-          <p><span className="font-medium text-foreground">Email:</span> {session.user.email}</p>
-          <p><span className="font-medium text-foreground">Nombre:</span> {session.user.name ?? "—"}</p>
-          <p><span className="font-medium text-foreground">Username:</span> {session.user.username ?? "—"}</p>
-          <p><span className="font-medium text-foreground">Tipo:</span> {session.user.userType === "creator" ? "Creador" : "Fan"}</p>
+          <p><span className="font-medium text-foreground">ID:</span> {user.id}</p>
+          <p><span className="font-medium text-foreground">Email:</span> {user.email}</p>
+          <p><span className="font-medium text-foreground">Nombre:</span> {user.name ?? "—"}</p>
+          <p><span className="font-medium text-foreground">Username:</span> {user.username ?? "—"}</p>
+          <p><span className="font-medium text-foreground">Tipo:</span> {user.userType === "creator" ? "Creador" : "Fan"}</p>
         </div>
 
         <form
