@@ -15,7 +15,7 @@ Plataforma de suscripción de contenido (tipo OnlyFans) para el mercado argentin
 | Lenguaje | TypeScript (strict) | ^5 |
 | Styling | Tailwind CSS | v4 |
 | UI Components | shadcn/ui | — |
-| Auth | NextAuth.js (Auth.js) | v5 |
+| Auth | NextAuth.js (Auth.js) v5 | beta |
 | Base de datos | Neon PostgreSQL (Vercel Marketplace) | — |
 | ORM | Drizzle | — |
 | Storage fotos | Vercel Blob (private) | — |
@@ -69,7 +69,7 @@ src/
 - Path alias: `@/*` mapea a `./src/*`
 - React Compiler está habilitado — NO usar `useMemo`, `useCallback`, `React.memo` manualmente
 - Mobile-first: diseñar siempre para celular primero
-- Idioma del código: inglés. Idioma de UI: español
+- Idioma del código: inglés. Idioma de UI: español. URLs en inglés (e.g. /sign-in, /sign-up, /dashboard)
 
 ### Server vs Client Components
 
@@ -87,10 +87,12 @@ src/
 ### Auth (NextAuth v5)
 
 - Providers: Google OAuth, Twitter/X OAuth, Credentials (email + password)
-- Fans: login social (Google/Twitter) sin verificación — mínima fricción antes del pago
-- Creadores: email + password con verificación obligatoria via Resend
+- NO usar Clerk — decisión explícita del proyecto, usar NextAuth siempre
+- Instagram OAuth NO funciona (Basic Display API deprecada dic 2024)
+- No hay roles (fan/creator) — todos son usuarios
 - Sesiones JWT con duración 30 días
-- Protección de rutas via middleware de NextAuth
+- Protección de rutas via proxy.ts (Next.js 16) con getToken() de next-auth/jwt
+- Sin auth → redirige a /sign-in. Con auth en /sign-in o /sign-up → redirige a /
 
 ### Base de Datos (Neon + Drizzle)
 
@@ -122,11 +124,14 @@ src/
 - Push notifications con Web Push API + VAPID keys — NO usar Firebase
 - Instalable en iOS (Safari) y Android (Chrome)
 
-### Styling
+### Styling y Componentes
 
 - Tailwind CSS v4
-- shadcn/ui para componentes base — copiar, no instalar como dependencia
+- shadcn/ui (style: base-nova, primitivas: @base-ui/react) — NO usar Radix, NO usar new-york style
+- Instalar componentes con `npx shadcn@latest add <component>`
+- TODOS los componentes de UI deben ser de shadcn — nunca crear componentes custom si shadcn tiene uno
 - Mobile-first siempre: empezar con diseño mobile, escalar con breakpoints
+- Iconos: lucide-react
 
 ### Contenido Bloqueado (Patrón Core)
 
